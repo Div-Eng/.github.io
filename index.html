@@ -1,14 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Display Static Image from ArcGIS Map">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Static Image from ArcGIS Map</title>
+  <style>
+    #mapView {
+      height: 600px;
+      width: 800px;
+    }
+  </style>
+</head>
+<body>
+  <div id="mapView"></div>
 
-<div><svg height="50" width="50"> <circle cx="25" cy="25" fill="none" r="10" stroke="rgb(115, 223, 255)" stroke-width="4"></circle> </svg> <span style="margin-right:5px; position:relative; top:-15px">75% - 100%</span></div>
+  <script src="https://js.arcgis.com/4.23/"></script>
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/renderers/SimpleRenderer"
+    ], function(Map, MapView, FeatureLayer, SimpleRenderer) {
 
-<div><svg height="50" width="50"> <circle cx="25" cy="25" fill="none" r="10" stroke="rgb(112, 168, 0)" stroke-width="4"></circle> </svg> <span style="margin-right:5px; position:relative; top:-15px">50% - 74.9%</span></div>
+      // Create a map with the World Street Map basemap
+      var map = new Map({
+        basemap: "streets"
+      });
 
-<div><svg height="50" width="50"> <circle cx="25" cy="25" fill="none" r="10" stroke="rgb(255, 0, 0)" stroke-width="4"></circle> </svg> <span style="margin-right:5px; position:relative; top:-15px">0% - 49.9%</span></div>
+      // Create a FeatureLayer for the Feature Service
+      var featureLayer = new FeatureLayer({
+        url: "https://services3.arcgis.com/pcSiFaVR4WP6Y3LN/arcgis/rest/services/Pine_Tree_(S03519)_Cover_Integrity_view_(public)/FeatureServer/0",
+        outFields: ["*"], // Include all fields
+        renderer: new SimpleRenderer({
+          symbol: {
+            type: "simple-marker",
+            style: "circle",
+            size: 8,
+            color: [255, 0, 0], // Red color
+            outline: {
+              width: 0.5,
+              color: [255, 255, 255] // White outline
+            }
+          }
+        })
+      });
 
-<div style="display:flex; align-items:center; margin-top:5px;">
-    <svg height="40" width="40">
-        <line stroke="rgb(255, 0, 0)" stroke-width="2.4" x1="8" x2="32" y1="8" y2="32"></line>
-        <line stroke="rgb(255, 0, 0)" stroke-width="2.4" x1="8" x2="32" y1="32" y2="8"></line>
-    </svg>
-    <span style="margin-left:5px;">Well Elev.</span>
-</div>
+      // Add the Feature Layer to the map
+      map.add(featureLayer);
+
+      // Create a view for the map
+      var view = new MapView({
+        container: "mapView",
+        map: map,
+        center: [-82.746498, 42.756589], // Center on Lenox Township Park
+        zoom: 12 // You can adjust the zoom level as needed
+      });
+
+      // Wait for the view to be ready
+      view.when(function() {
+        // Capture the current view as an image
+        view.toImage({ format: "png" })
+          .then(function(dataUrl) {
+            // Display the static image on the webpage
+            displayImage(dataUrl);
+          })
+          .catch(function(error) {
+            console.error("Error capturing static image:", error);
+          });
+      });
+
+      // Function to display the image on the webpage
+      function displayImage(dataUrl) {
+        // Create an image element
+        var img = document.createElement("img");
+
+        // Set the src attribute to the data URL
+        img.src = dataUrl;
+
+        // Append the image element to the document body
+        document.body.appendChild(img);
+      }
+
+    });
+  </script>
+</body>
+</html>
