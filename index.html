@@ -1,61 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="description" content="ArcGIS REST Export Maps">
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Street Map with Features Overlay</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.23/"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Map</title>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
     #mapView {
-      height: 600px;
-      width: 800px;
+      height: 100vh;
+      width: 100vw;
     }
   </style>
 </head>
 <body>
   <div id="mapView"></div>
+  <script src="https://js.arcgis.com/4.23/"></script>
   <script>
-    require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/FeatureLayer",
-      "esri/renderers/SimpleRenderer"
-    ], function(Map, MapView, FeatureLayer, SimpleRenderer) {
+    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/renderers/SimpleRenderer"], function(Map, MapView, FeatureLayer, SimpleRenderer) {
 
-      // Create a map with the World Street Map basemap
       var map = new Map({
         basemap: "streets"
       });
 
-      // Create a FeatureLayer for the Feature Service
       var featureLayer = new FeatureLayer({
         url: "https://services3.arcgis.com/pcSiFaVR4WP6Y3LN/arcgis/rest/services/Pine_Tree_(S03519)_Cover_Integrity_view_(public)/FeatureServer/0",
-        outFields: ["*"], // Include all fields
+        outFields: ["*"],
         renderer: new SimpleRenderer({
           symbol: {
             type: "simple-marker",
             style: "circle",
             size: 8,
-            color: [255, 0, 0], // Red color
+            color: [255, 0, 0],
             outline: {
               width: 0.5,
-              color: [255, 255, 255] // White outline
+              color: [255, 255, 255]
             }
           }
         })
       });
 
-      // Add the Feature Layer to the map
       map.add(featureLayer);
 
-      // Create a view for the map
       var view = new MapView({
         container: "mapView",
         map: map,
-        center: [-82.746498, 42.756589], // Center on Lenox Township Park
-        zoom: 12 // You can adjust the zoom level as needed
+        center: [-82.746498, 42.756589],
+        zoom: 12
       });
 
     });
