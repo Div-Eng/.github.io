@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +21,23 @@
     #dateInfo {
       margin-top: 10px;
     }
+
+    #dateTable {
+      margin-top: 10px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #dateTable th,
+    #dateTable td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #dateTable th {
+      background-color: #f2f2f2;
+    }
   </style>
 </head>
 
@@ -31,7 +47,14 @@
     Red Features: <span id="redCounter">0</span>
   </div>
   <div id="dateInfo">
-    IDate values: <span id="idateValues"></span>
+    <table id="dateTable">
+      <thead>
+        <tr>
+          <th>Human-Readable Date</th>
+        </tr>
+      </thead>
+      <tbody id="dateTableBody"></tbody>
+    </table>
   </div>
   <script>
     require([
@@ -87,13 +110,23 @@
           redCounter = result.features.length;
           document.getElementById("redCounter").innerText = redCounter;
 
-          // Display IDate values
-          var idateValues = result.features.map(function(feature) {
+          // Display IDate values in a table
+          var dateTableBody = document.getElementById("dateTableBody");
+          dateTableBody.innerHTML = ""; // Clear previous rows
+
+          result.features.forEach(function(feature) {
             var timestamp = feature.attributes.IDate;
             var date = new Date(timestamp);
-            return date.toLocaleString(); // Convert to a readable date format
-          }).join(", ");
-          document.getElementById("idateValues").innerText = idateValues;
+            var humanReadableDate = date.toLocaleString();
+
+            var row = document.createElement("tr");
+            var cell = document.createElement("td");
+
+            cell.textContent = humanReadableDate;
+
+            row.appendChild(cell);
+            dateTableBody.appendChild(row);
+          });
         });
       }
 
