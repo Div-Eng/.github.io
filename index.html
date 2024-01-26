@@ -15,17 +15,24 @@
       width: 100vw;
     }
   </style>
+  <script>
+    // Check user-agent for Samsung Galaxy S20
+    const isSamsungS20 = /Samsung SM-G981/.test(navigator.userAgent);
+
+    // Modify iframe source based on device
+    window.onload = function () {
+      const iframe = document.getElementById('mapView');
+      if (isSamsungS20) {
+        // Load mobile version for Samsung S20
+        iframe.src = "URL_TO_YOUR_MOBILE_VERSION";
+      } else {
+        // Load default version
+        iframe.src = "https://diversified-eng.maps.arcgis.com/apps/dashboards/6dccdde1b88d41ddbbcc4840b3dfc824";
+      }
+    };
+  </script>
 </head>
 <body>
-  <iframe src="https://diversified-eng.maps.arcgis.com/apps/dashboards/6dccdde1b88d41ddbbcc4840b3dfc824" style="width: 100%; height: 100vh; border: none;"></iframe>
-
-  <script src="https://js.arcgis.com/4.23/"></script>
-  <script>
-    // No need for the JavaScript code related to the FeatureLayer and MapView
-  </script>
+  <iframe id="mapView" style="width: 100%; height: 100vh; border: none;"></iframe>
 </body>
-
 </html>
-
-
-
