@@ -111,7 +111,7 @@
           redCounter = result.features.length;
           document.getElementById("redCounter").innerText = redCounter;
 
-          // Display IDate and RDate values in a table, excluding Unix epoch dates
+          // Display IDate and RDate values in a table, replacing Unix epoch only in RDate
           var dateTableBody = document.getElementById("dateTableBody");
           dateTableBody.innerHTML = ""; // Clear previous rows
 
@@ -120,11 +120,10 @@
             var rDateTimestamp = feature.attributes.RDate;
 
             var iDate = new Date(iDateTimestamp).toLocaleString();
-            var rDate = new Date(rDateTimestamp).toLocaleString();
+            var rDate = rDateTimestamp !== 0 ? new Date(rDateTimestamp).toLocaleString() : "";
 
             // Check if the date is Unix epoch (12/31/1969) and replace with an empty string
-            if (iDate.includes("12/31/1969") || rDate.includes("12/31/1969")) {
-              iDate = "";
+            if (rDate.includes("12/31/1969")) {
               rDate = "";
             }
 
