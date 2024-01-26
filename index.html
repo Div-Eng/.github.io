@@ -13,11 +13,16 @@
       height: 600px;
       width: 800px;
     }
+
+    #featureCounters {
+      margin-top: 10px;
+    }
   </style>
 </head>
 
 <body>
   <div id="mapView"></div>
+  <div id="featureCounters">Red Features: <span id="redCounter">0</span>, Green Features: <span id="greenCounter">0</span></div>
   <script>
     require([
       "esri/Map",
@@ -25,6 +30,10 @@
       "esri/layers/FeatureLayer",
       "esri/renderers/SimpleRenderer"
     ], function(Map, MapView, FeatureLayer, SimpleRenderer) {
+
+      // Counters for red and green features
+      var redCounter = 0;
+      var greenCounter = 0;
 
       // Create a map with the World Street Map basemap
       var map = new Map({
@@ -90,6 +99,26 @@
         map: map,
         center: [-82.746498, 42.756589], // Center on Lenox Township Park
         zoom: 15 // You can adjust the zoom level as needed
+      });
+
+      // Query the features and update counters
+      function updateCounters() {
+        featureLayer1.queryFeatures().then(function(result) {
+          redCounter = result.features.length;
+          document.getElementById("redCounter").innerText = redCounter;
+        });
+
+        featureLayer3.queryFeatures().then(function(result) {
+          greenCounter = result.features.length;
+          document.getElementById("greenCounter").innerText = greenCounter;
+        });
+      }
+
+      // Update counters when the view is updated
+      view.watch("updating", function(value) {
+        if (!value) {
+          updateCounters();
+        }
       });
 
     });
