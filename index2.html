@@ -1,75 +1,102 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Street Map</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL in Table</title>
+</head>
+<body>
 
+<table border="1">
+    <tr>
+        <td>
+            <object data="https://diversified-eng.maps.arcgis.com/apps/dashboards/6dccdde1b88d41ddbbcc4840b3dfc824" width="100%" height="500">
+                <!-- Fallback content in case the browser doesn't support the object tag or loading fails -->
+                <p>Unable to load content. Please visit the provided URL directly.</p>
+            </object>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="ArcGIS REST Export Maps">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Street Map with Features Overlay</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.23/"></script>
+  <style>
     #mapView {
-      height: 100vh;
-      width: 100vw;
+      height: 600px;
+      width: 800px;
     }
   </style>
 </head>
 <body>
   <div id="mapView"></div>
-  <script src="https://js.arcgis.com/4.23/"></script>
   <script>
-    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/renderers/SimpleRenderer"], function(Map, MapView, FeatureLayer, SimpleRenderer) {
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/renderers/SimpleRenderer"
+    ], function(Map, MapView, FeatureLayer, SimpleRenderer) {
 
+      // Create a map with the World Street Map basemap
       var map = new Map({
         basemap: "streets"
       });
 
-      var featureLayer = new FeatureLayer({
+      // Create a FeatureLayer for the first Feature Service
+      var featureLayer1 = new FeatureLayer({
         url: "https://services3.arcgis.com/pcSiFaVR4WP6Y3LN/arcgis/rest/services/Pine_Tree_(S03519)_Cover_Integrity_view_(public)/FeatureServer/0",
-        outFields: ["*"],
+        outFields: ["*"], // Include all fields
         renderer: new SimpleRenderer({
           symbol: {
             type: "simple-marker",
             style: "circle",
             size: 8,
-            color: [255, 0, 0],
+            color: [255, 0, 0], // Red color
             outline: {
               width: 0.5,
-              color: [255, 255, 255]
+              color: [255, 255, 255] // White outline
             }
           }
         })
       });
 
-      map.add(featureLayer);
+      // Create a FeatureLayer for the second Feature Service (lines, yellow color)
+      var featureLayer2 = new FeatureLayer({
+        url: "https://services3.arcgis.com/pcSiFaVR4WP6Y3LN/arcgis/rest/services/Pine_Tree_Acres_S03519_CAD/FeatureServer/1",
+        outFields: ["*"], // Include all fields
+        renderer: new SimpleRenderer({
+          symbol: {
+            type: "simple-line",
+            style: "solid",
+            color: [255, 255, 0], // Yellow color
+            width: 2
+          }
+        })
+      });
 
+      // Add both Feature Layers to the map
+      map.addMany([featureLayer1, featureLayer2]);
+
+      // Create a view for the map
       var view = new MapView({
         container: "mapView",
         map: map,
-        center: [-82.746498, 42.756589],
-        zoom: 12
+        center: [-82.746498, 42.756589], // Center on Lenox Township Park
+        zoom: 15 // You can adjust the zoom level as needed
       });
 
     });
   </script>
 </body>
 </html>
-
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Site Title</title>
-</head>
-<body>
-    <h2>
-        <img src="index.php" alt="Screenshot (No Cache)">
-    </h2>
-</body>
-</html>
--->
