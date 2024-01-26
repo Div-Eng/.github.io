@@ -50,7 +50,8 @@
     <table id="dateTable">
       <thead>
         <tr>
-          <th>Human-Readable Date</th>
+          <th>Issue Date</th>
+          <th>Repair Date</th>
         </tr>
       </thead>
       <tbody id="dateTableBody"></tbody>
@@ -110,21 +111,32 @@
           redCounter = result.features.length;
           document.getElementById("redCounter").innerText = redCounter;
 
-          // Display IDate values in a table
+          // Display IDate and RDate values in a table, excluding Unix epoch dates
           var dateTableBody = document.getElementById("dateTableBody");
           dateTableBody.innerHTML = ""; // Clear previous rows
 
           result.features.forEach(function(feature) {
-            var timestamp = feature.attributes.IDate;
-            var date = new Date(timestamp);
-            var humanReadableDate = date.toLocaleString();
+            var iDateTimestamp = feature.attributes.IDate;
+            var rDateTimestamp = feature.attributes.RDate;
+
+            var iDate = new Date(iDateTimestamp).toLocaleString();
+            var rDate = new Date(rDateTimestamp).toLocaleString();
+
+            // Check if the date is Unix epoch (12/31/1969) and replace with an empty string
+            if (iDate.includes("12/31/1969") || rDate.includes("12/31/1969")) {
+              iDate = "";
+              rDate = "";
+            }
 
             var row = document.createElement("tr");
-            var cell = document.createElement("td");
+            var cell1 = document.createElement("td");
+            var cell2 = document.createElement("td");
 
-            cell.textContent = humanReadableDate;
+            cell1.textContent = iDate;
+            cell2.textContent = rDate;
 
-            row.appendChild(cell);
+            row.appendChild(cell1);
+            row.appendChild(cell2);
             dateTableBody.appendChild(row);
           });
         });
