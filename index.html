@@ -1,38 +1,22 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Street Map</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-
-    #mapView {
-      height: 100vh;
-      width: 100vw;
-    }
-  </style>
-  <script>
-    // Check user-agent for Samsung Galaxy S20
-    const isSamsungS20 = /Samsung SM-G981/.test(navigator.userAgent);
-
-    // Modify iframe source based on device
-    window.onload = function () {
-      const iframe = document.getElementById('mapView');
-      if (isSamsungS20) {
-        // Load mobile version for Samsung S20
-        iframe.src = "URL_TO_YOUR_MOBILE_VERSION";
-      } else {
-        // Load default version
-        iframe.src = "https://diversified-eng.maps.arcgis.com/apps/dashboards/6dccdde1b88d41ddbbcc4840b3dfc824";
-      }
-    };
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL in Table</title>
 </head>
 <body>
-  <iframe id="mapView" style="width: 100%; height: 100vh; border: none;"></iframe>
+
+<table border="1">
+    <tr>
+        <td>
+            <object data="https://diversified-eng.maps.arcgis.com/apps/instant/basic/index.html?appid=e87adfedcf6046c88a5029c17c34b66c" width="800" height="500">
+                <!-- Fallback content in case the browser doesn't support the object tag or loading fails -->
+                <p>Unable to load content. Please visit the provided URL directly.</p>
+            </object>
+        </td>
+    </tr>
+</table>
+
 </body>
 </html>
